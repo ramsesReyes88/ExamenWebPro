@@ -4,36 +4,51 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Pendientes</title>
+    <title>Listado de Pendientes</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
+            background-color: #f8f9fa;
+            padding: 40px;
         }
 
         h2 {
             text-align: center;
+            margin-bottom: 30px;
             color: #333;
         }
 
+        .actions {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .actions a {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
         table {
-            border-collapse: collapse;
-            width: 80%;
             margin: 0 auto;
+            width: 90%;
+            border-collapse: collapse;
             background-color: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         th, td {
-            padding: 12px;
+            border: 1px solid #ddd;
+            padding: 14px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
         }
 
         th {
-            background-color: #4285f4;
+            background-color: #4d7ef7;
             color: white;
         }
 
@@ -41,10 +56,21 @@
             background-color: #f1f1f1;
         }
 
-        footer {
-            text-align: center;
-            margin-top: 30px;
-            color: #777;
+        .btn-edit {
+            background-color: #ffc107;
+            color: #000;
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            margin-right: 5px;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -52,12 +78,17 @@
 
     <h2>Listado de Pendientes</h2>
 
+    <div class="actions">
+        <a href="{% url 'crear_pendiente' %}">+ Nuevo Pendiente</a>
+    </div>
+
     <table>
         <thead>
             <tr>
                 {% for campo in campos %}
                     <th>{{ campo|title }}</th>
                 {% endfor %}
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -66,14 +97,14 @@
                     {% for campo in campos %}
                         <td>{{ p|get_item:campo }}</td>
                     {% endfor %}
+                    <td>
+                        <a href="{% url 'editar_pendiente' p|get_item:'id' %}" class="btn-edit">Editar</a>
+                        <a href="{% url 'eliminar_pendiente' p|get_item:'id' %}" class="btn-delete">Eliminar</a>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-
-    <footer>
-        Aplicación Examen2 - Parra’s Dev
-    </footer>
 
 </body>
 </html>

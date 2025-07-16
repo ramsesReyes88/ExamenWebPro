@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ accion }} Pendiente</title>
+</head>
+<body>
+    <h2>{{ accion }} Pendiente</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">{{ accion }}</button>
+        <a href="{% url 'lista_id_title' %}">Cancelar</a>
+    </form>
+</body>
+</html>

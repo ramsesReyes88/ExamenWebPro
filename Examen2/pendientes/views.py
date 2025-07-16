@@ -1,9 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django import forms
 from .models import Pendiente
 import requests
 
-API_URL = 'https://jsonplaceholder.typicode.com/todos'  # usa la API real de Parra's Dev si tienes otra
+# URL de la API externa (ejemplo, puedes cambiarla)
+API_URL = 'https://jsonplaceholder.typicode.com/todos'
 
+# Sincroniza datos de la API a la BD local
 def obtener_pendientes_api():
     response = requests.get(API_URL)
     if response.status_code == 200:
@@ -17,6 +20,7 @@ def obtener_pendientes_api():
                 }
             )
 
+# Lecturas desde API
 def lista_ids(request):
     obtener_pendientes_api()
     pendientes = Pendiente.objects.all().values('id')
@@ -46,3 +50,39 @@ def resueltos_id_user(request):
 def sin_resolver_id_user(request):
     pendientes = Pendiente.objects.filter(completed=False).values('id', 'user_id')
     return render(request, 'pendientes/lista.html', {'pendientes': pendientes, 'campos': ['id', 'user_id']})
+
+
+# ----------------------------
+# CRUD LOCAL (Create, Update, Delete)
+# ----------------------------
+
+# Formulario para crear y editar
+class PendienteForm(forms.ModelForm):
+    class Meta:
+        model = Pendiente
+        fields = ['id', 'title', 'user_id', 'completed']
+
+# Crear pendiente
+def crear_pendiente(request):
+    form = PendienteForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('lista_id_title')
+    return render(request, 'pendientes/formulario.html', {'form': form, 'accion': 'Crear'})
+
+# Editar pendiente
+def editar_pendiente(request, pk):
+    pendiente = get_object_or_404(Pendiente, pk=pk)
+    form = PendienteForm(request.POST or None, instance=pendiente)
+    if form.is_valid():
+        form.save()
+        return redirect('lista_id_title')
+    return render(request, 'pendientes/formulario.html', {'form': form, 'accion': 'Editar'})
+
+# Eliminar pendiente
+def eliminar_pendiente(request, pk):
+    pendiente = get_object_or_404(Pendiente, pk=pk)
+    if request.method == 'POST':
+        pendiente.delete()
+        return redirect('lista_id_title')
+    return render(request, 'pendientes/eliminar.html', {'pendiente': pendiente})

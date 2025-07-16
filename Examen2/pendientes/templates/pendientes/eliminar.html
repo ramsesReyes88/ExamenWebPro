@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Eliminar Pendiente</title>
+</head>
+<body>
+    <h2>¿Estás seguro de eliminar el pendiente "{{ pendiente.title }}"?</h2>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sí, eliminar</button>
+        <a href="{% url 'lista_id_title' %}">Cancelar</a>
+    </form>
+</body>
+</html>
