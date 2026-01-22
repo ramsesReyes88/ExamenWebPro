@@ -14,3 +14,19 @@
 
     - name: Apply service
       command: kubectl apply -f /home/ubuntu/Service.yml --kubeconfig=/home/ubuntu/.kube/config
+
+    - name: Copy Deployment.yml to webnode
+      copy:
+        src: Deployment.yml
+        dest: /home/ubuntu/Deployment.yml
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
+
+    - name: Copy Service.yml to webnode
+      copy:
+        src: Service.yml
+        dest: /home/ubuntu/Service.yml
+        owner: ubuntu
+        group: ubuntu
+        mode: "0644"
