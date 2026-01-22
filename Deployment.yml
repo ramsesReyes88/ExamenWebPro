@@ -14,6 +14,7 @@ spec:
     spec:
       containers:
         - name: myapp
-          image: ramsesreyes04/ExamenWebPro:latest
+          image: ramsesreyes04/examenwebpro:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
