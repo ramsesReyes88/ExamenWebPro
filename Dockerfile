@@ -1,10 +1,6 @@
-FROM centos:latest
+FROM rockylinux:9
 
-RUN cd /etc/yum.repos.d/ && \
-    sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && \
-    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
-
-RUN yum install -y httpd wget zip unzip
+RUN dnf -y install httpd wget zip unzip && dnf clean all
 
 ADD https://www.tooplate.com/zip-templates/2121_wave_cafe.zip /var/www/html/
 
