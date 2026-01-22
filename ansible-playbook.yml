@@ -1,20 +1,6 @@
 - hosts: webnode
   become: true
   tasks:
-    - name: Delete old deployment (ignore if not exists)
-      command: kubectl delete -f /home/ubuntu/Deployment.yml --kubeconfig=/home/ubuntu/.kube/config
-      ignore_errors: true
-
-    - name: Delete old service (ignore if not exists)
-      command: kubectl delete -f /home/ubuntu/Service.yml --kubeconfig=/home/ubuntu/.kube/config
-      ignore_errors: true
-
-    - name: Apply deployment
-      command: kubectl apply -f /home/ubuntu/Deployment.yml --kubeconfig=/home/ubuntu/.kube/config
-
-    - name: Apply service
-      command: kubectl apply -f /home/ubuntu/Service.yml --kubeconfig=/home/ubuntu/.kube/config
-
     - name: Copy Deployment.yml to webnode
       copy:
         src: Deployment.yml
@@ -30,3 +16,18 @@
         owner: ubuntu
         group: ubuntu
         mode: "0644"
+
+    - name: delete old deployment
+      command: kubectl delete -f /home/ubuntu/Deployment.yml --kubeconfig=/home/ubuntu/.kube/config
+      ignore_errors: true
+
+    - name: delete old service
+      command: kubectl delete -f /home/ubuntu/Service.yml --kubeconfig=/home/ubuntu/.kube/config
+      ignore_errors: true
+
+    - name: create new deployment
+      command: kubectl apply -f /home/ubuntu/Deployment.yml --kubeconfig=/home/ubuntu/.kube/config
+
+    - name: create new service
+      command: kubectl apply -f /home/ubuntu/Service.yml --kubeconfig=/home/ubuntu/.kube/config
+
